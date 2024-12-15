@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul_07</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn. bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Buku Tamu</h2>
+
+    <!--Table to Display-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Kode</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Pesan</th>
+                <!--<th>Actions</th>-->
+            </tr>
+        </thead>
+        <tbody id="guestTableBody">
+            <!--Guest rows will be appended here-->
+        </tbody>
+    </table>
+</div>
+    
+<script>
+    $(document).ready(function(){
+        const script_url='https://script.google.com/macros/s/AKfycbwcZAVSUgweMISmz6LE5wLG_kFbgFSgEHW0OPGIYWAOO7eoK5UM5FAb_F7Tpp11uuWZ/exec';//Ganti URL endpoint server
+        //Load guests on page load
+        loadGuests();
+        //Load guests into the table
+        function loadGuests(){
+            $.ajax({
+                url:script_url,
+                type:"GET",
+                data:{action:"read"},
+                success:function(response){
+                    const tbody = $('#guestTableBody');
+                    tbody.empty();//Clear the Table body
+
+                    response.forEach(guest=>{
+                        tbody.append(`
+                        <tr>
+                            <td>${guest.Kode}</td>
+                            <td>${guest.Nama}</td>
+                            <td>${guest.Email}</td>
+                            <td>${guest.Pesan}</td>
+                        </tr>
+                        `);
+                    });
+                },
+                error:function(jqXHR,textStatus,errorThrow){
+                    console.error("Request failed:",textStatus,errorThrow);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
